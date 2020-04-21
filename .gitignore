@@ -4,6 +4,8 @@
 *.h5
 *.jpg
 *.png
+*.tflite
+*.rknn
 onnx-tensorflow/
 tensorflow-onnx/
 repo/

@@ -1,0 +1,4 @@
+Exception: We are continually in the process of adding support to TensorFlow Lite for more ops. It would be helpful if you could inform us of how this conversion went by opening a github issue at https://github.com/tensorflow/tensorflow/issues/new?template=40-tflite-op-request.md
+ and pasting the following:
+
+Some of the operators in the model are not supported by the standard TensorFlow Lite runtime and are not recognized by TensorFlow. If you have a custom implementation for them you can disable this error with --allow_custom_ops, or by setting allow_custom_ops=True when calling tf.lite.TFLiteConverter(). Here is a list of builtin operators you are using: ADD, CONV_2D, FULLY_CONNECTED, MEAN, MUL, PAD, PADV2, TRANSPOSE. Here is a list of operators for which you will need custom implementations: Dilation2D.

@@ -1,0 +1,2 @@
+轉換onnx模型 python "C:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\model_optimizer\mo.py" --data_type=FP16 --mean_values "[123.675, 116.28, 103.53]"  --scale_values "[58.395, 57.12, 57.375]" --reverse_input_channels --input_model opt-efficientnet-b7.onnx
+python code參考: C:\Program Files (x86)\IntelSWTools\openvino_2019.3.379\inference_engine\samples\python_samples\classification_sample

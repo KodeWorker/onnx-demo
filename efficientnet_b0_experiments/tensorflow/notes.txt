@@ -1,0 +1,27 @@
+0. rewrite export_model.py with num_classes
+
+1. 
+Error in Node:efficientnet-b0/model/stem/IdentityN : No Op registered for IdentityN with domain_version of 11
+
+https://github.com/onnx/tensorflow-onnx/commit/a5b8e1832781655da182e086b6de1f7daca10acb
+tf2onnx/onnx_opset/tensor.py
+
+@tf_op("IdentityN")
+class IdentityN:
+    @classmethod
+    def version_1(cls, ctx, node, **kwargs):
+        ctx.remove_node(node.name)
+        for input_name, output_name in zip(node.input, node.output):
+            ctx.replace_all_inputs(ctx.get_nodes(), output_name, input_name)
+
+2.
+tf2onnx files: 
+import tenserflow.compat.v1 as tf
+# import tensorflow as tf
+
+3.
+tf2onnx/tfonnx.py
+from tensorflow.tools.graph_transforms import TransformGraph
+
+mark related expressions
+

@@ -12,6 +12,7 @@ repo/
 convert/efficientnet_onnx_model
 convert/efficientnet_saved_model/
 convert/tensorflow_models/
+convert/openvino_models
 convert/resnet_saved_model4/
 convert/openvino_part1/converted_model/
 convert/openvino_part1/inference_engine_build/

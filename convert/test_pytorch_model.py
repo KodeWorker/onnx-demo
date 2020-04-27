@@ -45,9 +45,9 @@ if __name__ == "__main__":
     x = preprocess(np.uint8(x))
     x = np.moveaxis(x, -1, 1)
     
-    #device = torch.device("cuda" if torch.cuda.is_available() 
-    #                      else "cpu")
-    device = torch.device("cpu")
+    device = torch.device("cuda" if torch.cuda.is_available() 
+                          else "cpu")
+    #device = torch.device("cpu")
     model = EfficientNet.from_pretrained('efficientnet-b0')    
     model.eval()
     model.to(device)

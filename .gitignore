@@ -20,6 +20,6 @@ efficientnet_b0_experiments/tensorflow/EfficientNet-b0/
 efficientnet_b0_experiments/tensorflow/efficientnet-b0-baseline/
 efficientnet_b0_experiments/tensorflow/output_model_dev_1/
 efficientnet_b0_experiments/tensorflow/output_model_dev_2/
-efficientnet_b0_experiments/tensorflow/pretrained_AA/
+efficientnet_b0_experiments/tensorflow/pretrained_model/
 efficientnet_b0_experiments/tensorflow/tfrecord/
 csharp/OnnxDemoWindowsFormsApp/packages

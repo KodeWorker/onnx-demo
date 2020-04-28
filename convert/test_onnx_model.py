@@ -33,37 +33,43 @@ def postprocess(result):
     return softmax(np.array(result)).tolist()
 
 if __name__ == "__main__":
-    
+    n_times = 100
     # img_path = "../dog.jpg"    
     img_path = r"D:\Datasets\Kaggle\dogs-vs-cats\train\cat\cat.1.jpg"
-    onnx_model_path = "./opt-efficientnet-b0.onnx"
-    label_map = load_labels("../imagenet-simple-labels.json")
     
-    x = Image.open(img_path)
-    x = x.resize((224, 224))
-    x = preprocess(np.uint8(x))
-    x = np.moveaxis(x, -1, 1)
-    
-    sess = onnxruntime.InferenceSession(onnx_model_path)
-    #print(sess.get_providers())
-    sess.set_providers(['CUDAExecutionProvider'])
-    #sess.set_providers(['CPUExecutionProvider'])
-    input_name = sess.get_inputs()[0].name
-    output_name = sess.get_outputs()[0].name
-    
-    t0 = time.time()
-    outputs = sess.run([output_name], {input_name: x})
-    print("Elapsed Time: {:4f} sec.".format(time.time() - t0))
-    
-    res = postprocess(outputs)
-    idx = np.argmax(res)
-    
-    print('========================================')
-    print('Final top prediction is: ' + label_map[idx])
-    print('========================================')
-    
-    sort_idx = np.flip(np.squeeze(np.argsort(res)))
-    print("top 5 prob.: {}".format(np.array(res)[sort_idx[:5]]))
-    print(label_map[sort_idx[:5]])
+    for model_name in ['efficientnet-b0', 'efficientnet-b1', 'efficientnet-b2', 'efficientnet-b3', 'efficientnet-b4', 'efficientnet-b5', 'efficientnet-b6', 'efficientnet-b7']:
+        
+        onnx_model_path = "./{}.onnx".format(model_name)
+        label_map = load_labels("../imagenet-simple-labels.json")
+        
+        x = Image.open(img_path)
+        x = x.resize((224, 224))
+        x = preprocess(np.uint8(x))
+        #x = np.moveaxis(x, -1, 1)
+        
+        sess = onnxruntime.InferenceSession(onnx_model_path)
+        #print(sess.get_providers())
+        #sess.set_providers(['CUDAExecutionProvider'])
+        sess.set_providers(['CPUExecutionProvider'])
+        input_name = sess.get_inputs()[0].name
+        output_name = sess.get_outputs()[0].name
+        
+        t1 = 0
+        for _ in range(n_times):
+            t0 = time.time()
+            outputs = sess.run([output_name], {input_name: x})
+            t1 += time.time() - t0
+        print("[{}] Elapsed Time: {:4f} sec.".format(model_name, t1/n_times))
+        
+        res = postprocess(outputs)
+        idx = np.argmax(res)
+        
+        print('========================================')
+        print('Final top prediction is: ' + label_map[idx])
+        print('========================================')
+        
+        sort_idx = np.flip(np.squeeze(np.argsort(res)))
+        print("top 5 prob.: {}".format(np.array(res)[sort_idx[:5]]))
+        print(label_map[sort_idx[:5]])
     
     

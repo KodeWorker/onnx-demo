@@ -35,16 +35,16 @@ def postprocess(result):
     return softmax(np.array(result)).tolist()
 
 if __name__ == "__main__":
-    
-    img_path = r"D:\Datasets\Kaggle\dogs-vs-cats\train\cat\cat.1.jpg"
+    n_times = 100
+    img_path = r"C:\Users\Tina_VI01\Desktop\KelvinWu\cat.1.jpg"
     label_map = load_labels("../imagenet-simple-labels.json")
-    onnx_file = "efficientnet-b1.onnx"
     
     x = Image.open(img_path)
     x = x.resize((224, 224))
     x = preprocess(np.uint8(x))
     x = np.moveaxis(x, -1, 1)
     
+<<<<<<< HEAD
     device = torch.device("cuda" if torch.cuda.is_available() 
                           else "cpu")
     #device = torch.device("cpu")
@@ -59,12 +59,35 @@ if __name__ == "__main__":
     
     res = postprocess(outputs)
     idx = np.argmax(res)
+=======
+    #device = torch.device("cuda" if torch.cuda.is_available() 
+    #                      else "cpu")
+    device = torch.device("cpu")
+>>>>>>> 509a07ecfb906cc5b727d3586b92cc83a36179f0
     
-    print('========================================')
-    print('Final top prediction is: ' + label_map[idx])
-    print('========================================')
-    
-    sort_idx = np.flip(np.squeeze(np.argsort(res)))
-    print("top 5 prob.: {}".format(np.array(res)[sort_idx[:5]]))
-    
-    print(label_map[sort_idx[:5]])
+    print(device)
+    for model_name in ['efficientnet-b0', 'efficientnet-b1', 'efficientnet-b2', 'efficientnet-b3', 'efficientnet-b4', 'efficientnet-b5', 'efficientnet-b6', 'efficientnet-b7']:
+        model = EfficientNet.from_pretrained(model_name)    
+        model.eval()
+        model.to(device)
+        
+        t1 = 0
+        for _ in range(n_times):
+            t0 = time.time()
+            y_pred = model(torch.from_numpy(x).float().to(device))
+            t1 += time.time() - t0
+        print("[{}] Elapsed Time: {:4f} sec.".format(model_name, t1/n_times))
+        outputs = (y_pred.data).cpu().numpy()
+        
+        
+        res = postprocess(outputs)
+        idx = np.argmax(res)
+        
+        print('========================================')
+        print('Final top prediction is: ' + label_map[idx])
+        print('========================================')
+        
+        sort_idx = np.flip(np.squeeze(np.argsort(res)))
+        print("top 5 prob.: {}".format(np.array(res)[sort_idx[:5]]))
+        
+        print(label_map[sort_idx[:5]])
